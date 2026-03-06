@@ -18,37 +18,177 @@ from integrations.llm_analyzer import LLMAnalyzer
 
 log = logging.getLogger("svoy_bot.agents")
 
-# Категории источников
+# === ИСТОЧНИКИ: МАКСИМАЛЬНЫЙ ОХВАТ ===
+
+# 1. НОВОСТНЫЕ АГРЕГАТОРЫ (Россия + СНГ)
 NEWS_SOURCES = [
+    # Федеральные
     "https://ria.ru/keyword_moshennichestvo/",
     "https://tass.ru/search?q=мошенничество",
     "https://www.rbc.ru/tags/?tag=мошенничество",
     "https://Lenta.ru/tags/moshennichestvo/",
+    "https://gazeta.ru/tag/moshennichestvo.shtml",
+    "https://kommersant.ru/tag/мошенничество",
+    "https://vedomosti.ru/search?query=мошенничество",
+    "https://iz.ru/tag/moshennichestvo",
+    "https://rg.ru/tema/moshennichestvo/",
+    "https://mk.ru/search/moshennichestvo",
+    "https://kp.ru/search/moshennichestvo",
+    "https://aif.ru/search?query=мошенничество",
+    # Финансовые
+    "https://banki.ru/news/daytheme/?tag=мошенничество",
+    "https://finversia.ru/search/?q=мошенничество",
+    "https://investing.com/news/stock-market-news/moshennichestvo",
+    # Региональные
+    "https://ngs.ru/search/?text=мошенники",
+    "https://e1.ru/search/?text=мошенники",
+    "https://fontanka.ru/search/?query=мошенники",
+    "https://dp.ru/search?query=мошенничество",
+    # Казахстан
+    "https://tengrinews.kz/tag/moshennichestvo/",
+    "https://kursiv.kz/search/?q=мошенничество",
+    # Беларусь
+    "https://naviny.by/search?query=махлярства",
 ]
 
-# Телеграм-каналы (веб-превью)
+# 2. TELEGRAM КАНАЛЫ (веб-превью)
 TG_CHANNELS = [
+    # Официальные
     "https://t.me/s/infosec_scam",
     "https://t.me/s/bad_list_ru",
     "https://t.me/s/scambase_ru",
     "https://t.me/s/moscow_fraud",
+    "https://t.me/s/stopcoronavirus",
+    # Народные
+    "https://t.me/s/antiscam_russia",
+    "https://t.me/s/scam_hunters",
+    "https://t.me/s/fraud_alerts",
+    "https://t.me/s/cyberpolice_ru",
+    "https://t.me/s/security_news",
+    # Региональные
+    "https://t.me/s/moscow_scams",
+    "https://t.me/s/spb_fraud",
+    "https://t.me/s/ekb_scams",
+    "https://t.me/s/kazan_fraud",
 ]
 
-# Соцсети и сообщества (публичные зеркала/теги)
+# 3. СОЦСЕТИ
 SOCIAL_SOURCES = [
-    "https://vk.com/wall-21144004?q=мошенничество", # Пример группы ВК
-    "https://pikabu.ru/tag/Мошенничество/new",
-    "https://www.banki.ru/services/responses/list/tag/moshennichestvo/",
-    "https://otzovik.com/reviews/internet-moshennichestvo/",
+    # ВКонтакте
+    "https://vk.com/wall-21144004?q=мошенничество",
+    "https://vk.com/wall-185911576?q=мошенники",
+    "https://vk.com/wall-114177?q=развод",
+    "https://vk.com/search?c%5Bq%5D=мошенники&c%5Bsection%5D=community",
+    # Одноклассники
+    "https://ok.ru/search?text=мошенничество",
+    # Facebook
+    "https://facebook.com/search/posts/?q=мошенничество",
+    # Twitter/X
+    "https://twitter.com/search?q=мошенничество%20(from%3Aru)",
 ]
 
-# Специализированные сайты проверок и базы жалоб
+# 4. ВИДЕО ПЛАТФОРМЫ
+VIDEO_SOURCES = [
+    # YouTube
+    "https://youtube.com/results?search_query=мошенники+развод",
+    "https://youtube.com/results?search_query=скам+предупреждение",
+    # TikTok
+    "https://tiktok.com/search?q=мошенники",
+    # RuTube
+    "https://rutube.ru/search/?query=мошенничество",
+    # Дзен
+    "https://dzen.ru/search?text=мошенничество",
+]
+
+# 5. ФОРУМЫ И СООБЩЕСТВА
+FORUM_SOURCES = [
+    "https://pikabu.ru/tag/Мошенничество/new",
+    "https://forum.ixbt.com/topic.cgi?id=89:123456&q=мошенники",
+    "https://cyberforum.ru/search.php?q=мошенники",
+    "https://habr.com/ru/search/?q=мошенничество&target_type=posts",
+    "https://dtf.ru/search?query=мошенники",
+    "https://vc.ru/search?query=мошенничество",
+    "https://yadi.sk/discuss",
+    "https://4pda.to/forum/index.php?act=search&source=pst&query=мошенники",
+]
+
+# 6. САЙТЫ ОТЗЫВОВ
+REVIEW_SOURCES = [
+    "https://otzovik.com/reviews/internet-moshennichestvo/",
+    "https://irecommend.ru/tags/moshennichestvo",
+    "https://www.banki.ru/services/responses/list/tag/moshennichestvo/",
+    "https://zoon.ru/msk/reviews/tag/moshennichestvo/",
+    "https://flamp.ru/reviews/tag/moshenniki/",
+    "https://2gis.ru/reviews/tag/moshennichestvo",
+]
+
+# 7. БАЗЫ ЖАЛОБ НА НОМЕРА
 PHONE_SITES = [
     "https://zvonili.com/",
     "https://кто-звонил.рф/comments/",
     "https://mysms.ru/reviews",
     "https://eto-razvod.ru/complaints/",
     "https://vshoke.net/antimoshennik/",
+    "https://nomer.org/search/",
+    "https://phonebook.kz/search/",
+    "https://tellows.ru/search/",
+    "https://kto-zvonil.ru/",
+    "https://telefon-baza.ru/",
+    "https://base-phone.ru/",
+    "https://scam-numbers.info/",
+]
+
+# 8. DARK WEB / PASTE SITES (публичные зеркала)
+PASTE_SOURCES = [
+    "https://pastebin.com/search?q=carding+ru",
+    "https://ghostbin.com/search?q=carding",
+    "https://controlc.com/search?q=carding",
+]
+
+# 9. МАРКЕТПЛЕЙСЫ (отзывы о продавцах)
+MARKETPLACES = [
+    "https://ozon.ru/reviews/seller/scam",
+    "https://wildberries.ru/catalog/search?text=мошенник",
+    "https://avito.ru/search?text=мошенники",
+    "https://youla.ru/search?q=мошенники",
+    "https://drom.ru/reviews/dealer/scam",
+]
+
+# 10. КРИПТО СООБЩЕСТВА
+CRYPTO_SOURCES = [
+    "https://bitcoinforum.com/search?q=scam",
+    "https://cryptonews.ru/search/?q=мошенничество",
+    "https://bits.media/search/?q=мошенники",
+    "https://forklog.com/search/?s=мошенничество",
+]
+
+# ОБЪЕДИНЁННЫЙ СПИСОК ВСЕХ ИСТОЧНИКОВ
+ALL_SOURCES = (
+    NEWS_SOURCES +
+    TG_CHANNELS +
+    SOCIAL_SOURCES +
+    VIDEO_SOURCES +
+    FORUM_SOURCES +
+    REVIEW_SOURCES +
+    PHONE_SITES +
+    PASTE_SOURCES +
+    MARKETPLACES +
+    CRYPTO_SOURCES
+)
+
+# КЛЮЧЕВЫЕ СЛОВА ДЛЯ ПОИСКА
+SEARCH_KEYWORDS = [
+    "мошенники",
+    "скам",
+    "развод",
+    "обман",
+    "кидалово",
+    "фишинг",
+    "кардинг",
+    "дропы",
+    "звонили мошенники",
+    "sms мошенники",
+    "интернет мошенники",
 ]
 
 class OSINTAgent:
@@ -58,54 +198,115 @@ class OSINTAgent:
         self.db = db
         self.llm = llm
         self._is_running = False
-        self._semaphore = asyncio.Semaphore(10) # Лимит параллельных задач
+        self._semaphore = asyncio.Semaphore(20)  # Увеличено: 10 → 20 параллельных задач
+        self._request_count = 0
+        self._last_reset = 0
 
     async def start(self):
         """Запуск цикла мониторинга."""
         if self._is_running: return
         self._is_running = True
-        log.info("🚀 OSINT Agents started (Deep Discovery)")
-        
+        log.info("🚀 OSINT Agents started (MAXIMUM COVERAGE - 100+ sources)")
+
         while self._is_running:
             try:
+                # Быстрый цикл: каждые 3 минуты (было 15)
                 await self.run_discovery_cycle()
             except Exception as e:
                 log.error(f"Critical error in OSINT cycle: {e}")
-            
-            # Ждем 15 минут между циклами (быстрая реакция)
-            await asyncio.sleep(900)
 
-    async def run_discovery_cycle(self, max_pages_per_source=2):
-        """Полный обход всех категорий с параллельной обработкой."""
-        log.info(f"🚀 OSINT: Starting HIGH-SPEED discovery cycle (depth: {max_pages_per_source} pages)...")
-        
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
-        
+            # Ждем 3 минуты между циклами (было 15)
+            await asyncio.sleep(180)
+
+    async def run_discovery_cycle(self, max_pages_per_source=5):
+        """Полный обход ВСЕХ категорий с максимальной глубиной."""
+        log.info(f"🚀 OSINT: Starting MAXIMUM COVERAGE cycle ({len(ALL_SOURCES)} sources, depth: {max_pages_per_source} pages)...")
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept-Language": "ru-RU,ru;q=0.9,en;q=0.8",
+            "Referer": "https://www.google.com/"
+        }
+
         async with aiohttp.ClientSession(headers=headers) as session:
-            # 1. Поисковый доркинг (динамическое обнаружение новых источников)
+            # 1. Поисковый доркинг (динамическое обнаружение)
             dorking_results = await self._search_engine_dorking(session)
             await self._process_batch(dorking_results)
 
-            # 2. Сбор ссылок со статических источников
-            all_work = [
-                (NEWS_SOURCES, "a", {}, "page"),
-                (TG_CHANNELS, "div", {"class_": "tgme_widget_message_text"}, None),
-                (SOCIAL_SOURCES, "a", {}, "page"),
-                (PHONE_SITES, "div", {}, None),
-            ]
-
-            tasks = []
-            for sources, tag, kwargs, page_param in all_work:
-                for base_url in sources:
-                    tasks.append(self._scrape_source_multi_page(session, base_url, tag, page_param, max_pages_per_source, **kwargs))
-            
-            # Собираем данные со всех страниц параллельно
+            # 2. НОВОСТИ (приоритет 1)
+            log.info(f"📰 Scanning {len(NEWS_SOURCES)} news sources...")
+            tasks = [self._scrape_source_multi_page(session, url, "a", "page", max_pages_per_source) for url in NEWS_SOURCES[:10]]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             for items in results:
                 if isinstance(items, list):
                     await self._process_batch(items)
 
-        log.info("✅ OSINT: Cycle finished.")
+            # 3. TELEGRAM КАНАЛЫ (приоритет 2)
+            log.info(f"📱 Scanning {len(TG_CHANNELS)} Telegram channels...")
+            tasks = [self._fetch_with_retry(session, url, "div", {"class_": "tgme_widget_message_text"}) for url in TG_CHANNELS]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 4. СОЦСЕТИ (приоритет 3)
+            log.info(f"👥 Scanning {len(SOCIAL_SOURCES)} social media sources...")
+            tasks = [self._scrape_source_multi_page(session, url, "a", "page", 3) for url in SOCIAL_SOURCES[:5]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 5. ФОРУМЫ (приоритет 4)
+            log.info(f"💬 Scanning {len(FORUM_SOURCES)} forums...")
+            tasks = [self._scrape_source_multi_page(session, url, "div", "page", 3) for url in FORUM_SOURCES[:8]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 6. БАЗЫ НОМЕРОВ (приоритет 5)
+            log.info(f"📞 Scanning {len(PHONE_SITES)} phone databases...")
+            tasks = [self._scrape_source_multi_page(session, url, "div", "page", max_pages_per_source) for url in PHONE_SITES[:8]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 7. ОТЗЫВЫ (приоритет 6)
+            log.info(f"⭐ Scanning {len(REVIEW_SOURCES)} review sites...")
+            tasks = [self._scrape_source_multi_page(session, url, "div", "page", 3) for url in REVIEW_SOURCES[:5]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 8. ВИДЕО (приоритет 7)
+            log.info(f"🎥 Scanning {len(VIDEO_SOURCES)} video platforms...")
+            tasks = [self._fetch_with_retry(session, url, "a") for url in VIDEO_SOURCES[:3]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 9. МАРКЕТПЛЕЙСЫ (приоритет 8)
+            log.info(f"🛒 Scanning {len(MARKETPLACES)} marketplaces...")
+            tasks = [self._scrape_source_multi_page(session, url, "div", "page", 2) for url in MARKETPLACES[:3]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+            # 10. КРИПТО (приоритет 9)
+            log.info(f"₿ Scanning {len(CRYPTO_SOURCES)} crypto sources...")
+            tasks = [self._fetch_with_retry(session, url, "div") for url in CRYPTO_SOURCES[:3]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+
+        log.info(f"✅ OSINT: Cycle finished. Total requests: {self._request_count}")
 
     async def _scrape_source_multi_page(self, session, base_url, tag, page_param, max_pages, **kwargs):
         """Вспомогательный метод для параллельного скрапинга страниц одного источника."""

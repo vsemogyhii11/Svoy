@@ -3,6 +3,10 @@ import os
 import logging
 import aiosqlite
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Загружаем .env
+load_dotenv()
 
 from utils.logger import setup_logging
 
