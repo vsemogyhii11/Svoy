@@ -153,6 +153,20 @@ MESSENGER_SOURCES = [
     "https://discord.com/search?q=ru+scam",
     # Slack
     "https://slack.com/search?q=fraud",
+    # MAX (российский мессенджер)
+    "https://max.ru/search?q=мошенники",
+    "https://max.ru/search?q=скам",
+    "https://max.ru/search?q=развод",
+    # VK Мессенджер
+    "https://vk.com/im/search?q=мошенники",
+    # ICQ New
+    "https://icq.com/search?q=scam",
+    # TamTam
+    "https://tamtam.chat/search?q=мошенники",
+    # eXpress
+    "https://express.ru/search?q=мошенники",
+    # Сферум
+    "https://sferum.ru/search?q=мошенники",
 ]
 
 # 3.2 Платформы для блогов
