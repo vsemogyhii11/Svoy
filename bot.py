@@ -21,6 +21,7 @@ from middleware import RateLimitMiddleware, LoggingMiddleware
 from analyzers import TextAnalyzer, LinkChecker, PhoneChecker
 from integrations import VirusTotalChecker, SafeBrowsingChecker, LLMAnalyzer, CASChecker
 from utils.i18n import load_locales
+from utils.logger import setup_logging
 
 from handlers.commands import router as commands_router
 from handlers.messages import router as messages_router
@@ -31,12 +32,7 @@ from handlers.voice import router as voice_router
 from handlers.group_events import router as group_events_router
 
 # ─── Логирование ───
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    stream=sys.stdout,
-)
-log = logging.getLogger("svoy_bot")
+log = setup_logging(log_file="logs/svoy_bot.log", level=logging.INFO)
 
 
 async def main():

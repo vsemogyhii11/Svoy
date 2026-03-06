@@ -5,11 +5,12 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Установка системных зависимостей для OCR
+# Установка системных зависимостей для OCR и health checks
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-rus \
     tesseract-ocr-eng \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

@@ -10,6 +10,12 @@ services:
     volumes:
       - ./data:/app/data
     command: python bot.py
+    healthcheck:
+      test: ["CMD", "python", "-c", "import asyncio; from database import Database; asyncio.run(Database().connect())"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   admin:
     build: .
@@ -22,3 +28,9 @@ services:
     volumes:
       - ./data:/app/data
     command: python admin_panel.py
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

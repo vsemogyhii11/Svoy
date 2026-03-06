@@ -13,8 +13,12 @@ beautifulsoup4==4.12.3
 
 # Дашборд и админ-панель:
 quart==0.19.4
-aiosqlite==0.20.0
+
+# Миграции БД:
+alembic==1.13.1
+sqlalchemy==2.0.23
 
 # Тестирование:
 pytest==8.0.0
 pytest-asyncio==0.23.5
+pytest-cov==4.1.0

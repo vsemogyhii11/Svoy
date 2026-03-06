@@ -1,13 +1,86 @@
-from quart import Quart, render_template, request, redirect, url_for, session
+from quart import Quart, render_template, request, redirect, url_for, session, jsonify
 import os
 import aiosqlite
 from datetime import datetime
+
+from utils.logger import setup_logging
+
+# Настраиваем логирование
+log = setup_logging(log_file="logs/admin_panel.log", level=logging.INFO)
 
 app = Quart(__name__)
 app.secret_key = os.getenv("ADMIN_SECRET_KEY", "super-secret-key")
 
 # Путь к БД из конфига или окружения
 DB_PATH = "data/svoy.db"
+
+
+@app.route('/health')
+async def health_check():
+    """
+    Health check endpoint для Docker и мониторинга.
+    
+    Returns:
+        JSON со статусом сервиса и зависимостей
+    """
+    status = {
+        "status": "healthy",
+        "version": "0.1.0",
+        "checks": {}
+    }
+    overall_status = "healthy"
+    
+    # Проверка БД
+    try:
+        async with aiosqlite.connect(DB_PATH) as db:
+            await db.execute("SELECT 1")
+        status["checks"]["database"] = "ok"
+    except Exception as e:
+        status["checks"]["database"] = f"error: {str(e)}"
+        overall_status = "unhealthy"
+    
+    # Проверка файлов данных
+    data_files = [
+        "data/scam_phones.json",
+        "data/scam_patterns.json",
+        "data/trusted_domains.json"
+    ]
+    missing_files = []
+    for file_path in data_files:
+        if not os.path.exists(file_path):
+            # Проверяем относительно корня проекта
+            root_path = os.path.join(os.path.dirname(__file__), file_path)
+            if not os.path.exists(root_path):
+                missing_files.append(file_path)
+    
+    if missing_files:
+        status["checks"]["data_files"] = f"missing: {', '.join(missing_files)}"
+        if overall_status == "healthy":
+            overall_status = "degraded"
+    else:
+        status["checks"]["data_files"] = "ok"
+    
+    status["status"] = overall_status
+    
+    http_status = 200 if overall_status == "healthy" else 503
+    return jsonify(status), http_status
+
+
+@app.route('/ready')
+async def readiness_check():
+    """
+    Readiness check endpoint для Kubernetes/Docker Swarm.
+    
+    Проверяет готовность сервиса принимать трафик.
+    """
+    try:
+        # Быстрая проверка БД
+        async with aiosqlite.connect(DB_PATH) as db:
+            await db.execute("SELECT COUNT(*) FROM users")
+        return jsonify({"ready": True}), 200
+    except Exception as e:
+        log.error(f"Readiness check failed: {e}")
+        return jsonify({"ready": False, "error": str(e)}), 503
 
 async def get_dashboard_stats():
     async with aiosqlite.connect(DB_PATH) as db:

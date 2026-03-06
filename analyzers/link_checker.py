@@ -17,6 +17,9 @@ from pathlib import Path
 from urllib.parse import urlparse
 import socket
 import logging
+
+from utils.cache import get_cache
+
 log = logging.getLogger("svoy_bot.link_checker")
 
 try:
@@ -71,6 +74,7 @@ class LinkChecker:
         data = self._load_data(trusted_path)
         self.trusted_domains = set(data.get("trusted", []))
         self.brand_keywords = data.get("brand_keywords", [])
+        self._cache = get_cache()
 
     def _load_data(self, path: str) -> dict:
         p = Path(path)
@@ -196,14 +200,21 @@ class LinkChecker:
         )
 
     async def _check_whois(self, domain: str) -> int | None:
-        """Возвращает возраст домена в днях (асинхронно)."""
+        """Возвращает возраст домена в днях (асинхронно с кэшированием)."""
         if not WHOIS_AVAILABLE:
             return None
-        
+
+        # Проверяем кэш
+        cache_key = f"whois:{domain}"
+        cached_age = await self._cache.get(cache_key)
+        if cached_age is not None:
+            log.debug(f"WHOIS cache hit for {domain}: {cached_age} days")
+            return cached_age
+
         try:
             # Выполняем блокирующий вызов в отдельном потоке
             w = await asyncio.to_thread(whois.whois, domain)
-            
+
             creation = w.creation_date
             if isinstance(creation, list):
                 creation = creation[0]
@@ -213,9 +224,17 @@ class LinkChecker:
                     from datetime import timezone as tz
                     creation = creation.replace(tzinfo=tz.utc)
                 age = (now - creation).days
-                return max(age, 0)
-        except Exception:
+                age = max(age, 0)
+                
+                # Кэшируем результат на 24 часа
+                await self._cache.set(cache_key, age, ttl=86400)
+                log.debug(f"WHOIS cached for {domain}: {age} days")
+                
+                return age
+        except Exception as e:
+            log.debug(f"WHOIS lookup failed for {domain}: {e}")
             pass
+        
         return None
 
     async def check_all(self, text: str) -> list[LinkCheckResult]:
