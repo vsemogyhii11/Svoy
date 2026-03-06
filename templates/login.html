@@ -4,82 +4,348 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход — СВОЙ Админ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --text-primary: #f1f5f9;
+            --sky-top: #60a5fa;
+            --sky-bottom: #93c5fd;
+            --wheat-light: #fbbf24;
+            --wheat-dark: #d97706;
+            --wheat-green: #84cc16;
+            --shield-bg: #1e40af;
+            --shield-border: #f0f9ff;
+            --text-dark: #1e3a5f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            height: 100 vh;
+            min-height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Голубое небо — градиент */
+        .sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+            z-index: -2;
+        }
+
+        /* Облака */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        .cloud:nth-child(1) {
+            width: 120px;
+            height: 60px;
+            top: 10%;
+            left: -120px;
+            animation-duration: 25s;
+        }
+
+        .cloud:nth-child(2) {
+            width: 180px;
+            height: 80px;
+            top: 20%;
+            left: -180px;
+            animation-duration: 35s;
+            animation-delay: 5s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 100px;
+            height: 50px;
+            top: 15%;
+            left: -100px;
+            animation-duration: 28s;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        /* Поле с рожью внизу */
+        .wheat-field {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            z-index: 0;
+            display: flex;
+            align-items: flex-end;
             justify-content: center;
-            margin: 0;
             overflow: hidden;
         }
 
-        .login-card {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            animation: fadeIn 0.5s ease-out;
+        .wheat-stalk {
+            position: relative;
+            width: 8px;
+            background: linear-gradient(to top, var(--wheat-green), var(--wheat-light));
+            border-radius: 4px 4px 0 0;
+            animation: sway 3s ease-in-out infinite;
+            transform-origin: bottom center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        .wheat-stalk::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 25px;
+            background: linear-gradient(to top, var(--wheat-dark), var(--wheat-light));
+            border-radius: 50% 50% 0 0;
+        }
+
+        .wheat-stalk:nth-child(odd) { animation-delay: 0.5s; }
+        .wheat-stalk:nth-child(3n) { animation-delay: 1s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* Карточка входа */
+        .login-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 { margin-bottom: 30px; color: var(--accent-color); }
+        /* Щит по центру */
+        .shield-logo {
+            width: 100px;
+            height: 120px;
+            margin: 0 auto 25px;
+            position: relative;
+            animation: shieldPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .shield-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 12px rgba(30, 64, 175, 0.4));
+        }
+
+        h2 {
+            color: var(--text-dark);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 35px;
+        }
 
         input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 16px 20px;
             margin-bottom: 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            color: white;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+            background: rgba(241, 245, 249, 0.8);
+            border: 2px solid rgba(96, 165, 250, 0.3);
+            border-radius: 16px;
+            color: var(--text-dark);
+            font-size: 16px;
+            transition: all 0.3s;
         }
 
-        input:focus { outline: none; border-color: var(--accent-color); }
+        input:focus {
+            outline: none;
+            border-color: var(--sky-top);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
 
         .btn-submit {
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, var(--accent-color), #818cf8);
+            padding: 16px;
+            background: linear-gradient(135deg, var(--shield-bg) 0%, #3b82f6 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             color: white;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
         }
 
-        .btn-submit:hover { opacity: 0.9; }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 40px 25px;
+            }
+
+            .wheat-field {
+                height: 120px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h2>🛡 СВОЙ Админ</h2>
-        <form method="post">
-            <input type="password" name="password" placeholder="Введите пароль администратора" required>
-            <button type="submit" class="btn-submit">Войти в панель</button>
-        </form>
+    <!-- Голубое небо -->
+    <div class="sky"></div>
+
+    <!-- Облака -->
+    <div class="clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
     </div>
+
+    <!-- Карточка входа -->
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Щит по центру -->
+            <div class="shield-logo">
+                <svg class="shield-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Градиент для щита -->
+                    <defs>
+                        <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1e40af"/>
+                            <stop offset="100%" style="stop-color:#3b82f6"/>
+                        </linearGradient>
+                        <filter id="shieldGlow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- Форма щита -->
+                    <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z"
+                          fill="url(#shieldGradient)"
+                          stroke="#f0f9ff"
+                          stroke-width="3"
+                          filter="url(#shieldGlow)"/>
+
+                    <!-- Внутренняя граница -->
+                    <path d="M50 15 L80 27 L80 58 Q80 88 50 105 Q20 88 20 58 L20 27 Z"
+                          fill="none"
+                          stroke="rgba(240, 249, 255, 0.5)"
+                          stroke-width="2"/>
+
+                    <!-- Буква С в центре -->
+                    <text x="50" y="72"
+                          text-anchor="middle"
+                          fill="white"
+                          font-size="42"
+                          font-weight="bold"
+                          font-family="Inter, sans-serif"
+                          style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">С</text>
+                </svg>
+            </div>
+
+            <h2>🛡 СВОЙ Админ</h2>
+            <p class="subtitle">Панель администратора системы защиты</p>
+
+            <form method="post">
+                <input type="password" name="password" placeholder="Введите пароль администратора" required>
+                <button type="submit" class="btn-submit">Войти в панель</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Поле с рожью -->
+    <div class="wheat-field" id="wheatField"></div>
+
+    <script>
+        // Генерация колосьев ржи
+        const wheatField = document.getElementById('wheatField');
+        const stalkCount = Math.floor(window.innerWidth / 12);
+
+        for (let i = 0; i < stalkCount; i++) {
+            const stalk = document.createElement('div');
+            stalk.className = 'wheat-stalk';
+
+            // Разная высота для естественности
+            const height = 60 + Math.random() * 80;
+            stalk.style.height = `${height}px`;
+
+            // Случайная задержка анимации
+            stalk.style.animationDelay = `${Math.random() * 2}s`;
+
+            wheatField.appendChild(stalk);
+        }
+    </script>
 </body>
 </html>

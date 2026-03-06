@@ -94,19 +94,23 @@ async def get_dashboard_stats():
         # Всего выявленных угроз (проверок с риском)
         async with db.execute("SELECT COUNT(*) FROM checks WHERE has_threat = 1") as cursor:
             scam_count = (await cursor.fetchone())[0]
-            
+        # Всего проверок
+        async with db.execute("SELECT COUNT(*) FROM checks") as cursor:
+            total_checks = (await cursor.fetchone())[0]
+
         # Последние 10 отчетов
         async with db.execute("SELECT * FROM reports ORDER BY last_report DESC LIMIT 10") as cursor:
             recent_reports = [dict(r) for r in await cursor.fetchall()]
-            
+
         # Все уникальные описания схем (топ 20)
         async with db.execute("SELECT description, COUNT(*) as count FROM reports GROUP BY description ORDER BY count DESC LIMIT 20") as cursor:
             scam_schemes = [dict(r) for r in await cursor.fetchall()]
-            
+
         return {
             "total_reports": total_reports,
             "total_users": total_users,
             "scam_count": scam_count,
+            "total_checks": total_checks,
             "recent_reports": recent_reports,
             "scam_schemes": scam_schemes
         }
