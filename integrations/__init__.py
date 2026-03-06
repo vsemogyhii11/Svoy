@@ -1,4 +1,5 @@
 from .virustotal import VirusTotalChecker
+from .safe_browsing import SafeBrowsingChecker
 from .osint_agents import OSINTAgent
 from .llm_analyzer import LLMAnalyzer
 from .cas_checker import CASChecker

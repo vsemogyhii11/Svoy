@@ -7,14 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sky-top: #60a5fa;
-            --sky-bottom: #93c5fd;
-            --wheat-light: #fbbf24;
-            --wheat-dark: #d97706;
-            --wheat-green: #84cc16;
-            --shield-bg: #1e40af;
-            --shield-border: #f0f9ff;
+            --primary-color: #1e40af;
+            --secondary-color: #3b82f6;
+            --accent-color: #60a5fa;
             --text-dark: #1e3a5f;
+            --text-light: #f1f5f9;
         }
 
         * {
@@ -27,135 +24,118 @@
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* Голубое небо — градиент */
-        .sky {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
-            z-index: -2;
-        }
-
-        /* Облака */
-        .clouds {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
             overflow: hidden;
+        }
+
+        /* Левая часть с фото */
+        .hero-section {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%),
+                        url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: white;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.4) 0%, transparent 60%);
             pointer-events: none;
         }
 
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 500px;
         }
 
-        .cloud:nth-child(1) {
+        .hero-shield {
             width: 120px;
-            height: 60px;
-            top: 10%;
-            left: -120px;
-            animation-duration: 25s;
-        }
-
-        .cloud:nth-child(2) {
-            width: 180px;
-            height: 80px;
-            top: 20%;
-            left: -180px;
-            animation-duration: 35s;
-            animation-delay: 5s;
-        }
-
-        .cloud:nth-child(3) {
-            width: 100px;
-            height: 50px;
-            top: 15%;
-            left: -100px;
-            animation-duration: 28s;
-            animation-delay: 10s;
+            height: 140px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 10px 30px rgba(59, 130, 246, 0.5));
+            animation: float 3s ease-in-out infinite;
         }
 
         @keyframes float {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(100vw + 200px)); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
-        /* Поле с рожью внизу */
-        .wheat-field {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 180px;
-            z-index: 0;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            overflow: hidden;
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .wheat-stalk {
-            position: relative;
-            width: 8px;
-            background: linear-gradient(to top, var(--wheat-green), var(--wheat-light));
-            border-radius: 4px 4px 0 0;
-            animation: sway 3s ease-in-out infinite;
-            transform-origin: bottom center;
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .wheat-stalk::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 25px;
-            background: linear-gradient(to top, var(--wheat-dark), var(--wheat-light));
-            border-radius: 50% 50% 0 0;
+        .hero-features {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
 
-        .wheat-stalk:nth-child(odd) { animation-delay: 0.5s; }
-        .wheat-stalk:nth-child(3n) { animation-delay: 1s; }
-
-        @keyframes sway {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
+        .hero-feature {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: left;
         }
 
-        /* Карточка входа */
-        .login-container {
-            flex: 1;
+        .hero-feature-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .hero-feature-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .hero-feature-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Правая часть - форма входа */
+        .login-section {
+            width: 500px;
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 40px;
             position: relative;
-            z-index: 1;
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: white;
             padding: 50px 40px;
-            border-radius: 32px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 420px;
-            text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            max-width: 400px;
             animation: slideUp 0.6s ease-out;
         }
 
@@ -164,68 +144,69 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Щит по центру */
-        .shield-logo {
-            width: 100px;
-            height: 120px;
-            margin: 0 auto 25px;
-            position: relative;
-            animation: shieldPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes shieldPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .shield-svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 4px 12px rgba(30, 64, 175, 0.4));
-        }
-
-        h2 {
-            color: var(--text-dark);
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #64748b;
-            font-size: 14px;
+        .login-header {
+            text-align: center;
             margin-bottom: 35px;
         }
 
-        input {
+        .login-icon {
+            width: 60px;
+            height: 70px;
+            margin: 0 auto 20px;
+        }
+
+        .login-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
             width: 100%;
             padding: 16px 20px;
-            margin-bottom: 20px;
-            background: rgba(241, 245, 249, 0.8);
-            border: 2px solid rgba(96, 165, 250, 0.3);
-            border-radius: 16px;
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             color: var(--text-dark);
             font-size: 16px;
             transition: all 0.3s;
         }
 
-        input:focus {
+        .form-input:focus {
             outline: none;
-            border-color: var(--sky-top);
+            border-color: var(--accent-color);
             background: white;
             box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1);
         }
 
-        input::placeholder {
+        .form-input::placeholder {
             color: #94a3b8;
         }
 
         .btn-submit {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, var(--shield-bg) 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border: none;
-            border-radius: 16px;
+            border-radius: 12px;
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -243,109 +224,179 @@
             transform: translateY(0);
         }
 
+        .error-message {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .security-note {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .security-note-text {
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
         /* Адаптивность */
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 40px 25px;
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
             }
 
-            .wheat-field {
-                height: 120px;
+            .hero-section {
+                min-height: 40vh;
+                padding: 40px 20px;
             }
 
-            h2 {
-                font-size: 24px;
+            .hero-features {
+                display: none;
+            }
+
+            .login-section {
+                width: 100%;
+                min-height: 60vh;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Голубое небо -->
-    <div class="sky"></div>
+    <!-- Левая часть с фото -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <!-- Щит SVG -->
+            <svg class="hero-shield" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1e40af"/>
+                        <stop offset="100%" style="stop-color:#3b82f6"/>
+                    </linearGradient>
+                    <filter id="shieldGlow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z"
+                      fill="url(#shieldGradient)"
+                      stroke="#f0f9ff"
+                      stroke-width="3"
+                      filter="url(#shieldGlow)"/>
+                <text x="50" y="72" text-anchor="middle" fill="white" font-size="42" font-weight="bold" font-family="Inter, sans-serif">С</text>
+            </svg>
 
-    <!-- Облака -->
-    <div class="clouds">
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-    </div>
+            <h1 class="hero-title">🛡 СВОЙ Админ</h1>
+            <p class="hero-subtitle">Панель администратора системы защиты от мошенников</p>
 
-    <!-- Карточка входа -->
-    <div class="login-container">
-        <div class="login-card">
-            <!-- Щит по центру -->
-            <div class="shield-logo">
-                <svg class="shield-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Градиент для щита -->
-                    <defs>
-                        <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#1e40af"/>
-                            <stop offset="100%" style="stop-color:#3b82f6"/>
-                        </linearGradient>
-                        <filter id="shieldGlow">
-                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-
-                    <!-- Форма щита -->
-                    <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z"
-                          fill="url(#shieldGradient)"
-                          stroke="#f0f9ff"
-                          stroke-width="3"
-                          filter="url(#shieldGlow)"/>
-
-                    <!-- Внутренняя граница -->
-                    <path d="M50 15 L80 27 L80 58 Q80 88 50 105 Q20 88 20 58 L20 27 Z"
-                          fill="none"
-                          stroke="rgba(240, 249, 255, 0.5)"
-                          stroke-width="2"/>
-
-                    <!-- Буква С в центре -->
-                    <text x="50" y="72"
-                          text-anchor="middle"
-                          fill="white"
-                          font-size="42"
-                          font-weight="bold"
-                          font-family="Inter, sans-serif"
-                          style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">С</text>
-                </svg>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <div class="hero-feature-icon">📊</div>
+                    <div class="hero-feature-title">Статистика</div>
+                    <div class="hero-feature-desc">Отчёты и аналитика</div>
+                </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-icon">🔒</div>
+                    <div class="hero-feature-title">Защита</div>
+                    <div class="hero-feature-desc">ML и AI детекция</div>
+                </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-icon">👥</div>
+                    <div class="hero-feature-title">Пользователи</div>
+                    <div class="hero-feature-desc">Мониторинг активности</div>
+                </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-icon">⚡</div>
+                    <div class="hero-feature-title">Real-time</div>
+                    <div class="hero-feature-desc">Живые обновления</div>
+                </div>
             </div>
-
-            <h2>🛡 СВОЙ Админ</h2>
-            <p class="subtitle">Панель администратора системы защиты</p>
-
-            <form method="post">
-                <input type="password" name="password" placeholder="Введите пароль администратора" required>
-                <button type="submit" class="btn-submit">Войти в панель</button>
-            </form>
         </div>
     </div>
 
-    <!-- Поле с рожью -->
-    <div class="wheat-field" id="wheatField"></div>
+    <!-- Правая часть - форма входа -->
+    <div class="login-section">
+        <div class="login-card">
+            <div class="login-header">
+                <!-- Маленький щит -->
+                <svg class="login-icon" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="loginShieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1e40af"/>
+                            <stop offset="100%" style="stop-color:#3b82f6"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z"
+                          fill="url(#loginShieldGradient)"
+                          stroke="#f0f9ff"
+                          stroke-width="3"/>
+                    <text x="50" y="72" text-anchor="middle" fill="white" font-size="42" font-weight="bold" font-family="Inter, sans-serif">С</text>
+                </svg>
+
+                <h2 class="login-title">Вход в панель</h2>
+                <p class="login-subtitle">Введите пароль администратора</p>
+            </div>
+
+            <div class="error-message" id="error-message"></div>
+
+            <form method="post" id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="password">🔒 Пароль</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="Введите пароль"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Войти в панель →
+                </button>
+            </form>
+
+            <div class="security-note">
+                <div class="security-note-text">
+                    🔒 Защищено HTTPS шифрованием
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Генерация колосьев ржи
-        const wheatField = document.getElementById('wheatField');
-        const stalkCount = Math.floor(window.innerWidth / 12);
-
-        for (let i = 0; i < stalkCount; i++) {
-            const stalk = document.createElement('div');
-            stalk.className = 'wheat-stalk';
-
-            // Разная высота для естественности
-            const height = 60 + Math.random() * 80;
-            stalk.style.height = `${height}px`;
-
-            // Случайная задержка анимации
-            stalk.style.animationDelay = `${Math.random() * 2}s`;
-
-            wheatField.appendChild(stalk);
+        // Показ ошибок
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        
+        if (error) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = '❌ ' + decodeURIComponent(error);
+            errorEl.classList.add('show');
         }
+
+        // Автофокус на поле пароля
+        document.getElementById('password').focus();
     </script>
 </body>
 </html>
