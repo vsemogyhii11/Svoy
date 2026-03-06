@@ -1,0 +1,20 @@
+aiogram==3.13.1
+python-dotenv==1.0.1
+python-whois==0.9.4
+aiohttp==3.10.11
+aiosqlite==0.20.0
+# Опционально — для OCR:
+pytesseract==0.3.13
+Pillow==11.0.0
+# Для OSINT агентов:
+beautifulsoup4==4.12.3
+# Опционально — для скриншотов сайтов:
+# playwright==1.49.0
+
+# Дашборд и админ-панель:
+quart==0.19.4
+aiosqlite==0.20.0
+
+# Тестирование:
+pytest==8.0.0
+pytest-asyncio==0.23.5

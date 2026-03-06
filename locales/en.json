@@ -1,0 +1,17 @@
+{
+    "welcome": "🛡 <b>SVOY</b> — fraud protection\n\nI help check suspicious messages, links and phone numbers.",
+    "help": "Send me text, a link, a phone number or a photo — I'll check it.",
+    "safe": "✅ No obvious signs of fraud detected.",
+    "suspicious": "⚡ SUSPICIOUS MESSAGE",
+    "danger": "⚠️ HIGH FRAUD RISK",
+    "risk_score": "Risk level: {score}%",
+    "report_thanks": "Thank you! You're helping protect others. 🛡",
+    "rate_limited": "⏳ Too many requests. Please wait a minute.",
+    "error": "😔 An error occurred. Try again later.",
+    "send_message": "Send a suspicious message, link or phone number — I'll check it. 🛡",
+    "ocr_processing": "🔍 Recognizing text from image...",
+    "ocr_no_text": "Could not recognize text. Try sending a clearer photo.",
+    "digest_header": "📊 SVOY Weekly Digest",
+    "phone_not_found": "Number not found in scam database.",
+    "brand_warning": "Domain contains '{keyword}' but is not the official website"
+}
