@@ -22,3 +22,7 @@ sqlalchemy==2.0.23
 pytest==8.0.0
 pytest-asyncio==0.23.5
 pytest-cov==4.1.0
+
+# Безопасность и защита:
+geoip2==4.8.0
+aiofiles==23.2.1
