@@ -72,20 +72,142 @@ TG_CHANNELS = [
     "https://t.me/s/kazan_fraud",
 ]
 
-# 3. СОЦСЕТИ
+# 3. СОЦСЕТИ (МАКСИМАЛЬНЫЙ ОХВАТ)
 SOCIAL_SOURCES = [
-    # ВКонтакте
+    # ВКонтакте (основные группы про мошенников)
     "https://vk.com/wall-21144004?q=мошенничество",
     "https://vk.com/wall-185911576?q=мошенники",
     "https://vk.com/wall-114177?q=развод",
     "https://vk.com/search?c%5Bq%5D=мошенники&c%5Bsection%5D=community",
+    "https://vk.com/wall-168950252?q=скам",
+    "https://vk.com/wall-198273283?q=обман",
+    "https://vk.com/wall-205925990?q=кидалово",
+    "https://vk.com/wall-162925467?q=фишинг",
+    "https://vk.com/wall-172155963?q=дропы",
+    "https://vk.com/wall-180050562?q=кардинг",
     # Одноклассники
     "https://ok.ru/search?text=мошенничество",
+    "https://ok.ru/search?text=обман",
+    "https://ok.ru/search?text=развод",
     # Facebook
     "https://facebook.com/search/posts/?q=мошенничество",
+    "https://facebook.com/search/posts/?q=scam+russia",
+    "https://facebook.com/groups/search/?q=fraud",
     # Twitter/X
     "https://twitter.com/search?q=мошенничество%20(from%3Aru)",
+    "https://twitter.com/search?q=скам%20lang%3Aru",
+    "https://twitter.com/search?q=развод%20lang%3Aru",
+    # Instagram (через веб)
+    "https://instagram.com/explore/tags/мошенники/",
+    "https://instagram.com/explore/tags/скам/",
+    # TikTok
+    "https://tiktok.com/search?q=мошенники",
+    "https://tiktok.com/search?q=развод",
+    "https://tiktok.com/search?q=скам",
+    # YouTube Community
+    "https://youtube.com/results?search_query=мошенники+сообщество",
+    "https://youtube.com/results?search_query=развод+обзор",
+    # Pinterest
+    "https://pinterest.ru/search/pins/?q=мошенники",
+    # Reddit
+    "https://reddit.com/search?q=ru+scam",
+    "https://reddit.com/r/AskARussian/search/?q=мошенники",
+    # Quora
+    "https://quora.com/search?q=Russian+scam",
+    # LiveJournal
+    "https://livejournal.com/search?q=мошенники",
+    # Telegram (расширенный список)
+    "https://t.me/s/antiscam_alerts",
+    "https://t.me/s/fraud_watch",
+    "https://t.me/s/scam_detector",
+    "https://t.me/s/cyber_security_news",
+    "https://t.me/s/ru_scams",
+    "https://t.me/s/moscow_fraud_alerts",
+    "https://t.me/s/spb_scams",
+    "https://t.me/s/ekb_fraud",
+    "https://t.me/s/kazan_scams",
+    "https://t.me/s/novosibirsk_fraud",
+    "https://t.me/s/sochi_scams",
+    "https://t.me/s/krasnodar_fraud",
+    "https://t.me/s/rostov_scams",
+    "https://t.me/s/chelyabinsk_fraud",
+    "https://t.me/s/samara_scams",
+    "https://t.me/s/ufa_fraud",
+    "https://t.me/s/volgograd_scams",
+    "https://t.me/s/saratov_fraud",
+    "https://t.me/s/tyumen_scams",
+    "https://t.me/s/vladivostok_fraud",
+    "https://t.me/s/khabarovsk_scams",
+    "https://t.me/s/krasnoyarsk_fraud",
+    "https://t.me/s/perm_scams",
+    "https://t.me/s/voronezh_fraud",
 ]
+
+# 3.1 Мессенджеры (публичные чаты)
+MESSENGER_SOURCES = [
+    # WhatsApp (через веб-зеркала)
+    "https://faq.whatsapp.com/search?q=scam",
+    # Viber
+    "https://viber.com/search?q=мошенники",
+    # Discord
+    "https://discord.com/search?q=ru+scam",
+    # Slack
+    "https://slack.com/search?q=fraud",
+]
+
+# 3.2 Платформы для блогов
+BLOG_SOURCES = [
+    # Дзен
+    "https://dzen.ru/search?text=мошенники",
+    "https://dzen.ru/search?text=скам",
+    # Teletype
+    "https://teletype.in/search?q=мошенники",
+    # Medium (RU)
+    "https://medium.com/search?q=russian+scam",
+    # Blogger
+    "https://blogger.com/search?q=мошенники",
+    # WordPress RU
+    "https://wordpress.com/search?q=скам",
+]
+
+# 3.3 Агрегаторы контента
+CONTENT_AGGREGATORS = [
+    # Яндекс.Дзен
+    "https://dzen.ru/id/мошенники",
+    # Google News
+    "https://news.google.com/search?q=мошенничество+ru",
+    # Яндекс.Новости
+    "https://yandex.ru/news/search?text=мошенники",
+    # Mail.ru Новости
+    "https://news.mail.ru/search/?q=мошенничество",
+    # Рамблер
+    "https://rambler.ru/search?query=мошенники",
+    # Yahoo
+    "https://search.yahoo.com/search?p=russian+scam",
+]
+
+# 3.4 Нишевые соцсети
+NICHE_SOCIAL = [
+    # GitHub (issues про скам)
+    "https://github.com/search?q=russian+scam&type=issues",
+    # GitLab
+    "https://gitlab.com/search?search=scam",
+    # StackOverflow
+    "https://stackoverflow.com/search?q=scam",
+    # HackerNews
+    "https://news.ycombinator.com/search?q=scam",
+    # ProductHunt
+    "https://producthunt.com/search?q=scam",
+]
+
+# ОБЪЕДИНЁННЫЙ СПИСОК ВСЕХ СОЦСЕТЕЙ
+ALL_SOCIAL = (
+    SOCIAL_SOURCES +
+    MESSENGER_SOURCES +
+    BLOG_SOURCES +
+    CONTENT_AGGREGATORS +
+    NICHE_SOCIAL
+)
 
 # 4. ВИДЕО ПЛАТФОРМЫ
 VIDEO_SOURCES = [
@@ -250,9 +372,17 @@ class OSINTAgent:
                 if isinstance(items, list):
                     await self._process_batch(items)
 
-            # 4. СОЦСЕТИ (приоритет 3)
-            log.info(f"👥 Scanning {len(SOCIAL_SOURCES)} social media sources...")
-            tasks = [self._scrape_source_multi_page(session, url, "a", "page", 3) for url in SOCIAL_SOURCES[:5]]
+            # 4. СОЦСЕТИ (ПРИОРИТЕТ 1 - максимум охвата!)
+            log.info(f"📱 Scanning {len(ALL_SOCIAL)} social media sources (MAXIMUM)...")
+            # Сканируем больше страниц для соцсетей
+            tasks = [self._scrape_source_multi_page(session, url, "div", "page", 8) for url in ALL_SOCIAL[:40]]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for items in results:
+                if isinstance(items, list):
+                    await self._process_batch(items)
+            
+            # Дополнительные соцсети (второй поток)
+            tasks = [self._fetch_with_retry(session, url, "article") for url in ALL_SOCIAL[40:60]]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             for items in results:
                 if isinstance(items, list):
