@@ -71,6 +71,13 @@ async def health_check():
     return jsonify(status), http_status
 
 
+
+@app.route('/metrics')
+async def metrics_endpoint():
+    from utils.metrics import get_metrics
+    m = get_metrics()
+    return m.export_prometheus(), 200, {'Content-Type': 'text/plain'}
+
 @app.route('/ready')
 async def readiness_check():
     """
