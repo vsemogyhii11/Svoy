@@ -32,7 +32,7 @@ from handlers.voice import router as voice_router
 from handlers.group_events import router as group_events_router
 
 # ─── Логирование ───
-log = setup_logging(log_file="logs/svoy_bot.log", level=logging.INFO)
+log = setup_logging(log_file="logs/svoy_bot.log")
 
 
 async def main():
