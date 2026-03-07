@@ -1,0 +1,225 @@
+{% extends "dashboard.html" %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+    margin: 30px 0;
+}
+
+.chart-container {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 40px rgba(30, 64, 175, 0.1);
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 300px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Графики -->
+<div class="charts-grid">
+    <!-- График угроз по дням -->
+    <div class="chart-container">
+        <div class="chart-title">📈 Угрозы по дням</div>
+        <div class="chart-wrapper">
+            <canvas id="threatsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- График типов угроз -->
+    <div class="chart-container">
+        <div class="chart-title">🎯 Типы угроз</div>
+        <div class="chart-wrapper">
+            <canvas id="threatTypesChart"></canvas>
+        </div>
+    </div>
+
+    <!-- График активности пользователей -->
+    <div class="chart-container">
+        <div class="chart-title">👥 Активность пользователей</div>
+        <div class="chart-wrapper">
+            <canvas id="userActivityChart"></canvas>
+        </div>
+    </div>
+
+    <!-- График проверок -->
+    <div class="chart-container">
+        <div class="chart-title">🔍 Проверки</div>
+        <div class="chart-wrapper">
+            <canvas id="checksChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+// Инициализация графиков
+document.addEventListener('DOMContentLoaded', function() {
+    // Общие настройки
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#64748b';
+    
+    // 1. График угроз по дням
+    const threatsCtx = document.getElementById('threatsChart').getContext('2d');
+    new Chart(threatsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ days|default(['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'])|tojson }},
+            datasets: [{
+                label: 'Угрозы',
+                data: {{ threats_data|default([12, 19, 15, 25, 22, 30, 28])|tojson }},
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#ef4444',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(96, 165, 250, 0.1)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // 2. График типов угроз
+    const threatTypesCtx = document.getElementById('threatTypesChart').getContext('2d');
+    new Chart(threatTypesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Срочность', 'Страх', 'Авторитет', 'Секретность', 'Деньги', 'Эмоции'],
+            datasets: [{
+                data: {{ threat_types|default([25, 20, 15, 15, 15, 10])|tojson }},
+                backgroundColor: [
+                    '#3b82f6', '#ef4444', '#8b5cf6',
+                    '#f59e0b', '#22c55e', '#ec4899'
+                ],
+                borderWidth: 2,
+                borderColor: 'rgba(255, 255, 255, 0.8)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 15, font: { size: 11 } }
+                }
+            }
+        }
+    });
+
+    // 3. График активности пользователей
+    const activityCtx = document.getElementById('userActivityChart').getContext('2d');
+    new Chart(activityCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ days|default(['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'])|tojson }},
+            datasets: [{
+                label: 'Активные пользователи',
+                data: {{ user_activity|default([50, 75, 60, 90, 85, 120, 100])|tojson }},
+                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                borderColor: '#3b82f6',
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(96, 165, 250, 0.1)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // 4. График проверок
+    const checksCtx = document.getElementById('checksChart').getContext('2d');
+    new Chart(checksCtx, {
+        type: 'line',
+        data: {
+            labels: {{ days|default(['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'])|tojson }},
+            datasets: [
+                {
+                    label: 'Проверки',
+                    data: {{ checks_data|default([100, 150, 120, 200, 180, 250, 220])|tojson }},
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Успешно',
+                    data: {{ success_data|default([90, 140, 110, 185, 165, 230, 200])|tojson }},
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { padding: 15, font: { size: 11 } }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(96, 165, 250, 0.1)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
