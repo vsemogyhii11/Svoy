@@ -12,7 +12,7 @@ load_dotenv()
 from utils.logger import setup_logging
 
 # Настраиваем логирование
-log = setup_logging(log_file="logs/admin_panel.log", level=logging.INFO)
+log = setup_logging(log_file="logs/admin_panel.log")
 
 app = Quart(__name__)
 app.secret_key = os.getenv("ADMIN_SECRET_KEY", "super-secret-key")
