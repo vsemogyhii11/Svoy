@@ -1,3 +1,4 @@
+from middleware.rate_limit import get_rate_limiter, RateLimitConfig
 from quart import Quart, render_template, request, redirect, url_for, session, jsonify
 import os
 import logging
@@ -136,13 +137,27 @@ async def dashboard():
 
 @app.route('/login', methods=['GET', 'POST'])
 async def login():
+    from middleware.rate_limit import get_rate_limiter
+    
+    limiter = get_rate_limiter()
+    
     if request.method == 'POST':
+        # Rate limiting для логина
+        key = f"login:{request.remote_addr}"
+        
         # В продакшене пароль должен быть в .env
         admin_pass = os.getenv("ADMIN_PASSWORD", "admin123")
         form = await request.form
+        
         if form['password'] == admin_pass:
+            limiter.record_success(key)
             session['logged_in'] = True
             return redirect(url_for('dashboard'))
+        else:
+            # Неверный пароль - записываем failed attempt
+            limiter.record_failed_attempt(key)
+            return await render_template('login.html', error='Неверный пароль')
+    
     return await render_template('login.html')
 
 @app.route('/logout')
