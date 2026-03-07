@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>СВОЙ — Защита от мошенников</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-button-color: #3390ec;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #f4f4f5;
+            --tg-theme-hint-color: #999999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--tg-theme-secondary-bg-color);
+            margin-bottom: 20px;
+        }
+
+        .shield-logo {
+            width: 80px;
+            height: 90px;
+            margin: 0 auto 15px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: var(--tg-theme-hint-color);
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--tg-theme-secondary-bg-color);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--tg-theme-button-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tg-button {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tg-button:active {
+            opacity: 0.8;
+        }
+
+        .tg-button.secondary {
+            background-color: var(--tg-theme-secondary-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+
+        .recent-threats {
+            background: var(--tg-theme-secondary-bg-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .recent-threats h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .threat-item {
+            background: var(--tg-theme-bg-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .threat-phone {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .threat-desc {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color);
+        }
+
+        .protection-status {
+            background: linear-gradient(135deg, #3390ec 0%, #2581c4 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .protection-status.active {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
+
+        .status-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .status-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .status-subtext {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--tg-theme-bg-color);
+            border-top: 1px solid var(--tg-theme-secondary-bg-color);
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .nav-item:active {
+            background: var(--tg-theme-secondary-bg-color);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--tg-theme-hint-color);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--tg-theme-button-color);
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--tg-theme-bg-color);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--tg-theme-secondary-bg-color);
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <svg class="shield-logo" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3390ec"/>
+                    <stop offset="100%" style="stop-color:#2581c4"/>
+                </linearGradient>
+            </defs>
+            <path d="M50 5 L90 20 L90 60 Q90 95 50 115 Q10 95 10 60 L10 20 Z"
+                  fill="url(#shieldGradient)"
+                  stroke="#ffffff"
+                  stroke-width="3"/>
+            <text x="50" y="72" text-anchor="middle" fill="white" font-size="42" font-weight="bold">С</text>
+        </svg>
+        <h1>🛡 СВОЙ</h1>
+        <p>Защита от мошенников</p>
+    </div>
+
+    <!-- Protection Status -->
+    <div class="protection-status active" id="protectionStatus">
+        <div class="status-icon">✅</div>
+        <div class="status-text">Защита активна</div>
+        <div class="status-subtext">Все системы в норме</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="checksCount">0</div>
+            <div class="stat-label">Проверок</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="threatsCount">0</div>
+            <div class="stat-label">Угроз</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="blockedCount">0</div>
+            <div class="stat-label">Заблокировано</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="reportsCount">0</div>
+            <div class="stat-label">Отчётов</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="tg-button" onclick="openCheckModal()">
+            🔍 Проверить номер/ссылку
+        </button>
+        <button class="tg-button secondary" onclick="showReportForm()">
+            📝 Сообщить о мошеннике
+        </button>
+        <button class="tg-button secondary" onclick="showSettings()">
+            ⚙️ Настройки
+        </button>
+    </div>
+
+    <!-- Recent Threats -->
+    <div class="recent-threats">
+        <h3>🔴 Последние угрозы</h3>
+        <div id="threatsList">
+            <div class="threat-item">
+                <div class="threat-phone">+7 (999) 123-45-67</div>
+                <div class="threat-desc">Мошенники представляются банком</div>
+            </div>
+            <div class="threat-item">
+                <div class="threat-phone">+7 (495) 987-65-43</div>
+                <div class="threat-desc">Ложные сотрудники ГИБДД</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home')">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Главная</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('check')">
+            <div class="nav-icon">🔍</div>
+            <div class="nav-label">Проверка</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('report')">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Отчёты</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('settings')">
+            <div class="nav-icon">⚙️</div>
+            <div class="nav-label">Настройки</div>
+        </div>
+    </div>
+
+    <!-- Check Modal -->
+    <div class="modal" id="checkModal">
+        <div class="modal-content">
+            <div class="modal-title">🔍 Проверка</div>
+            <input type="text" class="modal-input" id="checkInput" placeholder="Введите номер или ссылку">
+            <div class="modal-buttons">
+                <button class="tg-button secondary" onclick="closeModal('checkModal')">Отмена</button>
+                <button class="tg-button" onclick="performCheck()">Проверить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Telegram WebApp инициализация
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // Отправка данных боту
+        function sendData(data) {
+            tg.sendData(JSON.stringify(data));
+        }
+
+        // Переключение табов
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Здесь можно добавить логику переключения экранов
+            console.log('Switched to tab:', tab);
+        }
+
+        // Открытие модального окна проверки
+        function openCheckModal() {
+            document.getElementById('checkModal').classList.add('show');
+            document.getElementById('checkInput').focus();
+        }
+
+        // Закрытие модального окна
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Выполнение проверки
+        function performCheck() {
+            const inputValue = document.getElementById('checkInput').value;
+            if (!inputValue) {
+                tg.showAlert('Введите номер или ссылку');
+                return;
+            }
+
+            // Отправка данных боту
+            sendData({
+                action: 'check',
+                value: inputValue,
+                type: inputValue.includes('http') ? 'link' : 'phone'
+            });
+
+            closeModal('checkModal');
+            tg.showPopup({
+                title: 'Проверка',
+                message: 'Запрос отправлен. Ожидайте результат...',
+                buttons: [{type: 'ok'}]
+            });
+        }
+
+        // Форма отчёта
+        function showReportForm() {
+            sendData({action: 'report_form'});
+        }
+
+        // Настройки
+        function showSettings() {
+            sendData({action: 'settings'});
+        }
+
+        // Обновление статистики
+        function updateStats(stats) {
+            document.getElementById('checksCount').textContent = stats.checks || 0;
+            document.getElementById('threatsCount').textContent = stats.threats || 0;
+            document.getElementById('blockedCount').textContent = stats.blocked || 0;
+            document.getElementById('reportsCount').textContent = stats.reports || 0;
+        }
+
+        // Пример получения статистики от бота
+        tg.onEvent('main_button_clicked', () => {
+            // Обработка нажатия главной кнопки
+        });
+
+        // Инициализация
+        updateStats({
+            checks: 1247,
+            threats: 89,
+            blocked: 34,
+            reports: 156
+        });
+    </script>
+</body>
+</html>

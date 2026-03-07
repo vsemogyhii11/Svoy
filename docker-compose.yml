@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # Telegram Bot
   bot:
     build: .
     container_name: svoy_bot
@@ -9,14 +10,18 @@ services:
       - .env
     volumes:
       - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
     command: python bot.py
     healthcheck:
-      test: ["CMD", "python", "-c", "import asyncio; from database import Database; asyncio.run(Database().connect())"]
+      test: ["CMD", "python", "-c", "from database import Database; import asyncio; asyncio.run(Database().connect())"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
 
+  # Admin Panel
   admin:
     build: .
     container_name: svoy_admin
@@ -27,6 +32,9 @@ services:
       - "5005:5005"
     volumes:
       - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
     command: python admin_panel.py
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
@@ -34,3 +42,38 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: svoy_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Commander (Redis GUI) - опционально
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: svoy_redis_gui
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    profiles:
+      - dev
+
+volumes:
+  redis_data:
+
+networks:
+  default:
+    name: svoy_network
